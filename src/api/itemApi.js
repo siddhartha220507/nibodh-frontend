@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000/api/items';
+const API_URL = 'https://nibodh-backend.onrender.com/api/items';
 
 // 🛠 Pro-Tip: Ek helper function bana liya taaki baar-baar headers na likhne padein
 const getAuthHeaders = () => {
