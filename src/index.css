@@ -1,0 +1,1174 @@
+/* 🌐 GLOBAL RESET (Faltu bahar wala scrollbar fix) */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Screen ke bahar kuch bhi scroll nahi hoga */
+}
+/* 🌞 LIGHT MODE (Default) */
+:root {
+  --bg-color: #f9f9f9;
+  --card-bg: #ffffff;
+  --text-main: #222222;
+  --text-muted: #666666;
+  --border-color: #eeeeee;
+  --hover-bg: #f0f0f0;
+}
+
+/* 🌙 DARK MODE */
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-main: #f1f1f1;
+  --text-muted: #aaaaaa;
+  --border-color: #333333;
+  --hover-bg: #2a2a2a;
+}
+
+/* Poori body pe smooth transition aur PREMIUM FONT lagane ke liye */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* 👇 YEH NAYI LINE ADD KAR: Ekdum premium Apple/Windows native font ke liye */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* 🔥 PREMIUM DRIBBLE STYLE TOGGLE (Glow + SVG) */
+.premium-toggle {
+  box-sizing: border-box;
+  width: 76px;
+  height: 36px;
+  background: var(--card-bg); /* Theme ke hisaab se track ka color change hoga */
+  border: 1px solid var(--border-color);
+  border-radius: 50px;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px; /* Icons ko center mein rakhne ke liye */
+  box-shadow: inset 0px 2px 4px rgba(0,0,0,0.05); /* Ander ki taraf soft shadow */
+  transition: background 0.4s ease, border 0.4s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 🔵 The Sliding Circle (Glowing) */
+.premium-slider {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 28px;
+  height: 28px;
+  background: #28BB75; /* Light Mode: Beautiful Blue */
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(40, 187, 117, 0.6); /* Green Glow */
+  /* 🔥 Bouncy effect ke liye cubic-bezier */
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55), 
+              background 0.4s ease, box-shadow 0.4s ease;
+  z-index: 1; /* Icons iske upar rahenge */
+}
+
+/* 🟣 Dark Mode Slider (Moves right + Purple Glow) */
+[data-theme='dark'] .premium-slider {
+  transform: translateX(40px); /* 👈 Exact Math: Poora right me jayega symmetry ke sath */
+  background: #28BB75; /* Vibrant Green */
+  box-shadow: 0 0 15px rgba(40, 187, 117, 0.6); /* Green Glow */
+}
+
+/* 🎨 SVG Icons Style */
+.toggle-icon {
+  width: 16px;
+  height: 16px;
+  z-index: 2; /* Slider ke upar dikhne ke liye */
+  fill: var(--text-muted); /* Jab inactive hon toh grey color ke rahenge */
+  transition: fill 0.3s ease, transform 0.3s ease;
+}
+
+/* Jab icon active ho (yani slider uske theek peeche ho) */
+.toggle-icon.active {
+  fill: #ffffff; /* Icon white ho jayega taaki glow ke upar chamke */
+  transform: scale(1.1); /* Halka sa pop hoga */
+}
+/* 🔥 PROFESSIONAL SAVE BUTTON STATES */
+.pro-save-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 44px;
+  min-width: 100px;
+  padding: 0 24px;
+  background: var(--text-main);
+  color: var(--bg-color);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  /* Smooth transition for background, color, and width */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.pro-save-btn:disabled {
+  opacity: 0.7;
+}
+
+.pro-save-btn.is-idle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* 🔵 SAVING STATE (Blue with spinner) */
+.pro-save-btn.is-saving {
+  background: #3b82f6; 
+  color: #fff;
+  cursor: wait;
+  min-width: 130px; /* Thoda bada hoga kyunki loader aur text dono aayenge */
+}
+
+/* 🟢 SUCCESS STATE (Green with check) */
+.pro-save-btn.is-success {
+  background: #10b981; 
+  color: #fff;
+  cursor: default;
+  min-width: 120px;
+}
+
+/* 🌀 SMOOTH CSS SPINNER */
+.pro-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: pro-spin 0.8s linear infinite;
+}
+
+@keyframes pro-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Fade in animation for text/icons */
+.fade-in {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* 🔥 PREMIUM AI SEARCH BAR (Pill Shape + Glowing Orb) */
+.ai-search-bar {
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: 50px; /* Pill Shape */
+  padding: 6px 6px 6px 15px; /* Ander ka spacing */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06); /* Soft floating shadow */
+  border: 1px solid var(--border-color);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  width: 100%;
+}
+
+.ai-search-bar:focus-within {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.1); /* Glow up on focus */
+  border-color: #3b82f6; /* Slight blue tint */
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .ai-search-bar {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* 🟢 THE GLOWING ORB (Attachment Button) */
+.ai-orb-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #4ade80, #059669); /* Green AI Glow */
+  border: none;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  flex-shrink: 0;
+  box-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+  animation: orb-breathe 3s infinite alternate ease-in-out;
+  transition: transform 0.2s;
+}
+
+.ai-orb-btn:hover {
+  transform: scale(1.1);
+}
+
+@keyframes orb-breathe {
+  0% { box-shadow: 0 0 10px rgba(74, 222, 128, 0.4); transform: scale(1); }
+  100% { box-shadow: 0 0 20px rgba(74, 222, 128, 0.8); transform: scale(1.05); }
+}
+
+/* 💬 INVISIBLE INPUT FIELD */
+.ai-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding: 0 15px;
+  font-size: 16px;
+  color: var(--text-main);
+}
+
+.ai-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+/* 🎯 INLINE PILL SAVE BUTTON */
+.ai-save-btn {
+  height: 38px;
+  border-radius: 40px; /* Fully rounded */
+  padding: 0 20px;
+  margin-left: 10px;
+}
+/* 🔥 PERFECTLY SIZED LOGO (Search bar ko chipkane ke liye) */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0px; 
+  /* 👇 THE HACKER FIX: Negative margin se search bar ekdum chipak jayega */
+  margin-bottom: -20px; 
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.ni-bodh-logo {
+  width: 75%;
+  max-width: 400px; 
+  height: 100px; 
+  object-fit: cover;
+  transition: filter 0.5s ease;
+}
+
+/* 🌙 DARK MODE BLENDING FIX */
+[data-theme='dark'] .ni-bodh-logo {
+  filter: invert(1); 
+  filter: invert(1) drop-shadow(0 0 10px rgba(0, 255, 255, 0.4));
+}
+/* 🔥 LOTTIE ANIMATION THEME MATCHING */
+.empty-lottie-wrapper {
+  margin-bottom: 10px;
+  transition: filter 0.5s ease;
+}
+
+/* 🌙 DARK MODE MAGIC FOR LOTTIE */
+[data-theme='dark'] .empty-lottie-wrapper {
+  /* Ye magic filter animation ke bright colors ko dark theme ke sath blend kar dega */
+  filter: grayscale(0.2) invert(0.85) hue-rotate(180deg) brightness(1.1);
+  opacity: 0.8; /* Thoda subtle karne ke liye */
+}
+/* 🔥 PREMIUM CARD HOVER (For ALL cards including Tweets) */
+.memory-card {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
+}
+
+/* 🌞 Light Mode: Elegant soft shadow */
+.memory-card:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* 🌙 Dark Mode: Subtle Cyan Neon Glow (Matching your Logo) */
+[data-theme='dark'] .memory-card:hover {
+  transform: translateY(-5px);
+  /* 👇 Yahi wo decent blurred light hai! */
+  box-shadow: 0 10px 40px rgba(0, 255, 255, 0.08), 0 0 20px rgba(0, 255, 255, 0.05) !important;
+  border-color: rgba(0, 255, 255, 0.2) !important;
+}
+/* 🛠️ CARD HOVER ACTIONS (Smooth fade in) */
+.memory-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-5px); 
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  z-index: 10;
+}
+
+.memory-card:hover .memory-actions {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* 🔘 Custom Icon Buttons (Replaces Emojis) */
+.action-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  padding: 0;
+}
+
+/* Light Mode Hover */
+.action-icon-btn:hover {
+  color: #3b82f6; /* Blue tint */
+  border-color: #3b82f6;
+  background: var(--bg-color);
+}
+
+/* 🌙 Dark Mode Theme Match (Cyan Glow) */
+[data-theme='dark'] .action-icon-btn:hover {
+  border-color: #00e5ff;
+  color: #00e5ff;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+  background: var(--hover-bg);
+}
+/* 🌬️ SMOOTH POP ANIMATION (For Edit & Highlight Boxes) */
+.smooth-pop {
+  animation: smoothPopIn 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  transform-origin: top center; /* Upar se khulega */
+}
+
+@keyframes smoothPopIn {
+  0% { 
+    opacity: 0; 
+    transform: translateY(-10px) scale(0.98); 
+  }
+  100% { 
+    opacity: 1; 
+    transform: translateY(0) scale(1); 
+  }
+}
+/* 📜 PREMIUM SMOOTH SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px; /* Ekdum patla aur modern look */
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Piche ka rasta invisible rahega */
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color); /* Default theme color */
+  border-radius: 10px; /* Ekdum gol (rounded) edges */
+  /* Scrollbar ke side mein thodi space (padding) banata hai */
+  border: 2px solid var(--bg-color); 
+}
+
+/* 🌞 Light Mode Hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6; /* Hover karne pe mast Blue */
+}
+
+/* 🌙 Dark Mode Scrollbar Magic */
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #444; /* Dark mode mein thoda dark base */
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb:hover {
+  background: #00e5ff; /* Hover karne pe tera Theme-matched Neon Cyan! */
+}
+/* 🕸️ PREMIUM GRAPH VIEW HEADER */
+.graph-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 30px;
+  background: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* ⬅️ Smooth Back Arrow Button */
+.graph-back-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* Ekdum gol button */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Hover karne par peeche khiskega aur glow karega */
+.graph-back-btn:hover {
+  transform: translateX(-4px); /* Piche ki taraf slide hoga */
+  background: var(--hover-bg);
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+[data-theme='dark'] .graph-back-btn:hover {
+  border-color: #00e5ff; /* Tera Neon Cyan */
+  color: #00e5ff;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.3);
+}
+/* 🌌 SMOOTH PAGE TRANSITIONS */
+.page-transition {
+  animation: fadeSlideIn 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+  /* GPU acceleration ke liye taaki animation bilkul na atke */
+  will-change: opacity, transform; 
+}
+
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.98) translateY(10px); /* Halka sa chota aur niche se aayega */
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0); /* Apni original jagah par set ho jayega */
+  }
+}
+/* 📱 DRIBBBLE-STYLE COLLAPSIBLE SIDEBAR */
+.sidebar-wrapper {
+  position: relative; /* Floating arrow ke liye zaroori */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--card-bg);
+  border-right: 1px solid var(--border-color);
+  /* Dribbble jaisa snappy aur smooth bounce effect */
+  transition: width 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 50;
+  overflow: visible; /* Taki edge button cut na ho */
+}
+
+/* Sidebar Widths */
+.sidebar-wrapper.expanded { width: 260px; }
+.sidebar-wrapper.collapsed { width: 80px; }
+
+/* 🔘 THE FLOATING EDGE TOGGLE BUTTON (Dribbble Style) */
+.edge-toggle-btn {
+  position: absolute;
+  top: 36px;
+  right: -14px; /* Aadha andar, aadha bahar */
+  width: 28px;
+  height: 28px;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-muted);
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+.edge-toggle-btn:hover {
+  color: #00e5ff; /* Tera theme Cyan */
+  border-color: #00e5ff;
+  transform: scale(1.15);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+}
+
+/* 🧑‍💻 TOP USER PROFILE SECTION */
+.sidebar-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  border-bottom: 1px solid transparent;
+}
+.profile-avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px; /* Dribbble jaisa thoda square rounded */
+  background: rgba(0, 229, 255, 0.1);
+  color: #00e5ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+}
+.status-dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
+  background: #ff4757; /* Notification Red Dot */
+  border-radius: 50%;
+  border: 2px solid var(--card-bg);
+}
+
+/* 📋 Menu Items (Sleek Dribbble Look) */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 4px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-muted);
+  position: relative;
+  white-space: nowrap;
+}
+.sidebar-item:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+}
+.sidebar-item.active {
+  background: rgba(0, 229, 255, 0.1); 
+  color: #00e5ff;
+  font-weight: 600;
+}
+/* Active Indicator Dot (Left side) */
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 20px;
+  background: #00e5ff;
+  border-radius: 0 4px 4px 0;
+}
+
+/* 🔤 Text Hiding & Showing */
+.sidebar-text {
+  margin-left: 14px;
+  opacity: 1;
+  transition: opacity 0.3s ease 0.1s; /* Delay for smooth reveal */
+}
+.collapsed .sidebar-text {
+  opacity: 0;
+  width: 0;
+  transition: opacity 0.1s ease;
+  pointer-events: none;
+}
+
+/* Custom Tooltip on Hover (When Collapsed) */
+.collapsed .sidebar-item:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 60px;
+  background: var(--card-bg);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+  z-index: 1000;
+  pointer-events: none;
+  animation: tooltipSlide 0.2s forwards;
+}
+@keyframes tooltipSlide {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* 🔢 Premium Badges */
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--border-color);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.sidebar-item.active .sidebar-badge {
+  background: #00e5ff;
+  color: #000;
+}
+.collapsed .sidebar-badge { display: none; }
+
+/* 🕸️ Open Graph & Logout */
+.action-btn-sidebar {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.action-btn-sidebar.graph {
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+}
+.action-btn-sidebar.graph:hover {
+  background: var(--hover-bg);
+  border-color: #00e5ff;
+  color: #00e5ff;
+}
+.action-btn-sidebar.logout { color: #ff4757; }
+.action-btn-sidebar.logout:hover { background: rgba(255, 71, 87, 0.1); }
+
+/* Sidebar Widths */
+.sidebar-wrapper.expanded { width: 260px; }
+.sidebar-wrapper.collapsed { width: 80px; }
+
+/* 🍔 Hamburger Toggle Button */
+.sidebar-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+.sidebar-toggle-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+}
+
+/* 🖼️ Logo Blending & Scaling */
+.sidebar-logo-img {
+  width: 150px;;
+  flex: 1; /* Pura bacha hua right space le lega */
+  height: 93px; /* Ek clean height taaki image fit aaye */
+  object-fit: cover; /* Shape bigde bina stretch karega */
+  border-radius: 6px; /* Halka sa rounded corner */
+  transition: all 0.4s ease;
+  mix-blend-mode: multiply; /* Light mode magic */
+}
+[data-theme='dark'] .sidebar-logo-img {
+  filter: invert(1) drop-shadow(0 0 10px rgba(0, 255, 255, 0.3));
+  mix-blend-mode: screen; /* Dark mode magic */
+}
+/* Collapsed wali class ki zaroorat nahi kyunki humne JSX se hi logo hide kar diya hai jab collapse ho */
+.collapsed .sidebar-logo-img {
+  max-width: 40px; /* Collapsed state mein logo chhota ho jayega */
+}
+
+/* 📋 Menu Items */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 4px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-muted);
+  text-decoration: none;
+  position: relative;
+  white-space: nowrap;
+}
+.sidebar-item:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+  transform: translateX(4px); /* Hover pe thoda aage khiskega */
+}
+
+/* Active Menu State (Theme Matching) */
+.sidebar-item.active {
+  background: rgba(0, 229, 255, 0.1); 
+  color: var(--text-main);
+  font-weight: 600;
+  border-left: 3px solid #00e5ff;
+}
+[data-theme='light'] .sidebar-item.active {
+  background: rgba(59, 130, 246, 0.1);
+  border-left: 3px solid #3b82f6;
+}
+
+/* 🔤 Text Hiding on Collapse */
+.sidebar-text {
+  margin-left: 14px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.collapsed .sidebar-text {
+  opacity: 0;
+  transform: translateX(-10px);
+  pointer-events: none;
+  position: absolute;
+}
+
+/* 🔢 Premium Badges (Numbers) */
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--border-color);
+  color: var(--text-muted);
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+}
+.sidebar-item.active .sidebar-badge {
+  background: var(--text-main);
+  color: var(--card-bg);
+}
+.collapsed .sidebar-badge {
+  display: none; /* Collapse hone par numbers chhup jayenge */
+}
+
+/* 🕸️ Open Graph View Button */
+.graph-btn-sidebar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 10px 12px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.graph-btn-sidebar:hover {
+  background: var(--hover-bg);
+  border-color: #00e5ff;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* 👇 THE FIX FOR CENTERING */
+.collapsed .graph-btn-sidebar {
+  justify-content: center;
+  padding: 12px; 
+  margin: 10px auto; /* Is auto se wo horizontally center ho jayega */
+  width: 44px; /* Exact width and height taaki square bane */
+  height: 44px;
+}
+
+/* 🚪 Logout Button */
+.logout-btn-sidebar {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  margin: 10px 12px 20px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #ef4444; /* Premium Red */
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.logout-btn-sidebar:hover {
+  background: rgba(239, 68, 68, 0.1);
+  transform: translateX(4px);
+}
+.collapsed .logout-btn-sidebar {
+  justify-content: center;
+  padding: 12px 0;
+}
+/* 📱 SHADCN-STYLE PREMIUM SIDEBAR */
+.shadcn-sidebar {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-color); /* Shadcn uses main bg for sidebar */
+  border-right: 1px solid var(--border-color);
+  transition: width 0.3s ease;
+  z-index: 50;
+  width: 260px; /* Standard Shadcn width */
+}
+.shadcn-sidebar.collapsed { width: 72px; }
+
+/* 📋 Group Labels (e.g., "Platform", "Collections") */
+.shadcn-group-label {
+  padding: 16px 16px 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+}
+.collapsed .shadcn-group-label { display: none; }
+
+/* 📂 Menu Items */
+.shadcn-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  margin: 2px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.shadcn-item:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+}
+.shadcn-item.active {
+  background: var(--hover-bg);
+  color: var(--text-main);
+  font-weight: 600;
+}
+/* Lucide Icons inside items */
+.shadcn-item svg {
+  margin-right: 12px;
+  flex-shrink: 0;
+  stroke-width: 2px;
+  opacity: 0.8;
+}
+.shadcn-item.active svg { opacity: 1; }
+.collapsed .shadcn-item svg { margin-right: 0; margin: 0 auto; }
+.collapsed .shadcn-item span { display: none; }
+
+/* ⬇️ Collapsible Animation */
+.shadcn-collapsible-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out;
+}
+.shadcn-sub-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px 8px 44px; /* Indented for sub-items */
+  margin: 2px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+.shadcn-sub-item:hover {
+  background: var(--hover-bg);
+  color: var(--text-main);
+}
+/* Sidebar sub-item hover logic */
+.shadcn-sub-item.group:hover .collection-actions {
+  display: flex !important;
+  align-items: center;
+  gap: 5px;
+}
+
+.shadcn-sub-item.active {
+  background: var(--hover-bg);
+  color: var(--text-main);
+  font-weight: 600;
+}
+/* 🔥 USER PROFILE HOVER EFFECT */
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  margin-left: -10px; /* Taki align rahe */
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  overflow: hidden;
+  max-width: 180px; /* Bada email bahar na nikle */
+}
+
+.user-profile-badge:hover {
+  background: var(--hover-bg);
+  transform: translateX(2px); /* Hover pe halka sa aage khiskega */
+}
+
+/* 🟣 DYNAMIC AVATAR CIRCLE */
+.avatar-circle {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00e5ff 0%, #3b82f6 100%); /* Premium gradient */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  text-transform: uppercase; /* Hamesha capital letter rahega */
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 229, 255, 0.3);
+}
+/* 🧱 BENTO / MASONRY GRID STYLING */
+.my-masonry-grid {
+  display: flex;
+  margin-left: -20px; /* Gutter size offset */
+  width: auto;
+}
+.my-masonry-grid_column {
+  padding-left: 20px; /* Gutter size */
+  background-clip: padding-box;
+}
+/* =========================================
+   📱 MOBILE RESPONSIVENESS (MAGIC MEDIA QUERIES)
+   ========================================= */
+
+.mobile-menu-btn {
+  display: none; /* Desktop pe hide rahega */
+}
+
+.mobile-overlay {
+  display: none;
+}
+
+.mobile-close-btn {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  /* 1. Sidebar ko Drawer (Slide-over) banaya */
+  .shadcn-sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Default hide rahega */
+    height: 100vh;
+    z-index: 10000;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.3);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  
+  .shadcn-sidebar.mobile-open {
+    left: 0 !important; /* Slide In */
+  }
+
+  /* 2. Dark Overlay jab sidebar open ho */
+  .mobile-overlay.active {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+    z-index: 9999; 
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* 3. Hamburger Button Show */
+  .mobile-menu-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Sidebar Toggle Buttons Logic */
+  .desktop-toggle-btn { display: none !important; }
+  .mobile-close-btn { display: flex !important; }
+
+  /* 4. Top Bar & Logo Adjustments for Mobile */
+  .dashboard-top-bar {
+    padding: 10px 15px 15px 15px !important;
+  }
+  .ni-bodh-logo {
+    height: 40px !important; /* Logo chhota kiya taaki fit aaye */
+    max-width: 65vw !important; /* Toggle button ko jagah dene ke liye width fix ki */
+    object-fit: contain;
+    margin-bottom: 5px !important; 
+    margin-top: 5px !important;
+  }
+
+  /* 🔥 5. Theme Toggle button ko chhota aur side mein kiya */
+  .theme-toggle-container {
+    top: 15px !important;
+    right: 10px !important;
+    transform: scale(0.75); /* Button 25% chhota ho jayega mobile pe */
+    transform-origin: top right;
+  }
+
+  /* 🔥 6. Top Bar Spacing */
+  .dashboard-top-bar {
+    padding: 5px 15px 15px 15px !important;
+  }
+
+  /* 5. SaveBar (Search) Adjustments */
+  .ai-search-bar { padding: 4px 4px 4px 10px; }
+  .ai-input { font-size: 16px; /* iOS Auto-zoom fix */ padding: 0 10px; }
+  .ai-save-btn { padding: 0 15px; min-width: 80px; font-size: 13px; }
+  
+  /* 6. Dashboard Spacing */
+  .dashboard-content-area { padding: 15px !important; }
+  
+  /* Masonry Grid margin adjustments for mobile */
+  .my-masonry-grid { margin-left: -15px; }
+  .my-masonry-grid_column { padding-left: 15px; }
+}
+/* 🔥 THEME TOGGLE CONTAINER */
+.theme-toggle-container {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+/* =========================================
+   🔐 AUTHENTICATION PAGES (LOGIN/REGISTER)
+   ========================================= */
+
+.auth-page-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  /* Premium Dark/Cyan Gradient Background */
+  background: var(--bg-color);
+  background-image: radial-gradient(circle at top right, rgba(0, 229, 255, 0.15), transparent 40%),
+                    radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.15), transparent 40%);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+/* Glassmorphism Card */
+.auth-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .auth-card {
+  box-shadow: 0 0 40px rgba(0, 229, 255, 0.05);
+  border-color: rgba(0, 229, 255, 0.2);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+/* Smooth Inputs */
+.auth-input-group {
+  margin-bottom: 20px;
+}
+
+.auth-input-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-main);
+  font-size: 14px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: #00e5ff;
+  box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Premium Glowing Button */
+.auth-submit-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #00e5ff 0%, #3b82f6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 229, 255, 0.3);
+  margin-top: 10px;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 229, 255, 0.5);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-submit-btn:disabled {
+  background: var(--border-color);
+  color: var(--text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.auth-link {
+  color: #00e5ff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.auth-link:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+}
