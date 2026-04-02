@@ -21,7 +21,7 @@ const Register = () => {
             const response = await fetch('https://nibodh-backend.onrender.com/api/auth/register', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password }) 
+                body: JSON.stringify({ username: name, email, password }) 
             });
             const data = await response.json();
             

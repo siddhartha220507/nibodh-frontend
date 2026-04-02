@@ -8,8 +8,13 @@ import {
 } from 'lucide-react'; 
 import toast from 'react-hot-toast'; 
 import { getCollections, createCollection, deleteCollection } from '../api/itemApi';
+// 🔥 NAYA IMPORT: Token lene ke liye useAuth
+import { useAuth } from '../context/AuthContext';
 
 const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearchChange, onCollectionSelect, currentCollection, stats, userEmail, isMobileOpen, setIsMobileOpen, ambientMemories = [] }) => {
+    // 🔥 NAYA HOOK: Context se token nikalne ke liye
+    const { token } = useAuth();
+    
     const [isCollapsed, setIsCollapsed] = useState(false);
     const [isCollectionsOpen, setIsCollectionsOpen] = useState(true);
     const [collections, setCollections] = useState([]);
@@ -18,7 +23,6 @@ const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearc
     const [newFolderName, setNewFolderName] = useState('');
     const [folderToDelete, setFolderToDelete] = useState(null);
     
-    // 🔥 AUTO-ROTATION STATE
     const [memoryIndex, setMemoryIndex] = useState(0);
 
     const navigate = useNavigate();
@@ -43,17 +47,15 @@ const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearc
         } catch (e) { console.error("Failed to load collections:", e); }
     };
 
-    // 🔥 Har 5 second mein memory rotate karne ka logic
     useEffect(() => {
         if (!ambientMemories || ambientMemories.length <= 1) return;
         const interval = setInterval(() => {
             setMemoryIndex((prevIndex) => (prevIndex + 1) % ambientMemories.length);
-        }, 5000); // 5000ms = 5 seconds
+        }, 5000); 
         
         return () => clearInterval(interval);
     }, [ambientMemories]);
 
-    // 🔥 Date ko "2 days ago" mein convert karne ka function
     const getTimeAgo = (dateString) => {
         if (!dateString) return "some time ago";
         const diff = new Date() - new Date(dateString);
@@ -88,6 +90,17 @@ const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearc
             toast.success("Folder deleted successfully!", { id: loadingToast }); 
         } catch (e) { toast.error("Failed to delete folder.", { id: loadingToast }); }
         setFolderToDelete(null); 
+    };
+
+    // 🔥 NAYA FUNCTION: Token copy karne ke liye
+    const copyTokenToClipboard = () => {
+        if (token) {
+            const cleanToken = token.replace(/"/g, ''); // Clean any extra quotes
+            navigator.clipboard.writeText(cleanToken);
+            toast.success("Token copied! Paste it in the Extension. 🔗");
+        } else {
+            toast.error("No token found. Please login again.");
+        }
     };
 
     const currentAmbient = ambientMemories[memoryIndex];
@@ -125,7 +138,6 @@ const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearc
                         })}
                     </div>
 
-                    {/* 🔥 THE NEW AMBIENT NOTIFICATION CARD (MOVED HERE) */}
                     {!isCollapsed && currentAmbient && (
                         <div className="smooth-pop" key={currentAmbient._id} style={{
                             margin: '15px', padding: '15px',
@@ -190,8 +202,16 @@ const Sidebar = ({ onLogout, currentFilter, onFilterSelect, searchQuery, onSearc
                     </div>
                 </div>
 
-                <div style={{ borderTop: '1px solid var(--border-color)' }}>
+                {/* 🔥 NAYA FOOTER: Yahan Naya Button Add Kiya Hai */}
+                <div style={{ borderTop: '1px solid var(--border-color)', paddingBottom: '10px' }}>
                     <div onClick={() => navigate('/graph')} className="shadcn-item"><Network size={18} /><span>Graph View</span></div>
+                    
+                    {/* 🔥 THE NEW CONNECT EXTENSION BUTTON */}
+                    <div onClick={copyTokenToClipboard} className="shadcn-item" style={{ color: '#00e5ff' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{marginRight: '12px'}}><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Connect Extension</span>
+                    </div>
+
                     <div onClick={onLogout} className="shadcn-item" style={{ color: '#ef4444' }}><LogOut size={18} /><span>Logout</span></div>
                 </div>
 
