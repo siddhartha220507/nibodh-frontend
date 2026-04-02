@@ -1172,3 +1172,38 @@ body {
   text-decoration: underline;
   text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
 }
+/* 🔥 EXTENSION DOWNLOAD BUTTON STYLING */
+.ext-download-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0, 229, 255, 0.05);
+  border: 1px dashed rgba(0, 229, 255, 0.3);
+  border-radius: 10px;
+  color: #00e5ff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-decoration: none; /* Link ke liye */
+}
+
+.ext-download-btn:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-style: solid;
+  border-color: #00e5ff;
+  box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.ext-download-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.ext-download-btn:hover svg {
+  transform: translateY(2px); /* Download arrow move hoga */
+}
